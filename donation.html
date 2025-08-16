@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate Food - Annadata-Setu</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #2d5016;
+            --secondary-green: #4a7c59;
+            --accent-orange: #ff6b35;
+            --warm-yellow: #ffe66d;
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-nature: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+            --gradient-sunset: linear-gradient(135deg, #ff8a80 0%, #ff6b35 50%, #ffa726 100%);
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --shadow-soft: 0 8px 32px rgba(31, 38, 135, 0.37);
+            --shadow-hard: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px),
+                radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 50px 50px, 20px 20px;
+            z-index: -1;
+            animation: floatBg 30s ease-in-out infinite;
+        }
+
+        @keyframes floatBg {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1.2rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo::before {
+            content: '🌾';
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-5px); }
+            60% { transform: translateY(-3px); }
+        }
+
+        .back-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(15px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 120px;
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        .page-header h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ffffff, #e3f2fd, #ffffff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmerText 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmerText {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 3rem;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-sunset);
+            border-radius: 25px 25px 0 0;
+        }
+
+        .form-title {
+            color: var(--primary-green);
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .form-title::after {
+            content: '🍽️';
+            position: absolute;
+            right: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(-50%) rotate(0deg); }
+            50% { transform: translateY(-70%) rotate(10deg); }
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            color: var(--primary-green);
+            font-size: 1.1rem;
+            position: relative;
+        }
+
+        .required::after {
+            content: '*';
+            color: #e74c3c;
+            margin-left: 4px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid rgba(76, 175, 80, 0.2);
+            border-radius: 15px;
+            font-size: 1rem;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--secondary-green);
+            box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.1);
+            transform: translateY(-2px);
+            background: white;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            transform: scale(1.2);
+            accent-color: var(--secondary-green);
+        }
+
+        .submit-btn {
+            background: var(--gradient-nature);
+            color: white;
+            border: none;
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            margin-top: 2rem;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.6s;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: var(--shadow-hard);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        /* Info Cards */
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .info-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .info-card-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .info-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-card p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            color: #2e7d32;
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 2rem;
+            display: none;
+            animation: successPulse 0.6s ease-out;
+        }
+
+        @keyframes successPulse {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        /* Loading State */
+        .submit-btn.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .submit-btn.loading::after {
+            content: '';
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: translateY(-50%) rotate(0deg); }
+            100% { transform: translateY(-50%) rotate(360deg); }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .form-container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-container {
+                padding: 0 15px;
+            }
+
+            .info-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .form-title::after {
+                position: static;
+                display: block;
+                margin-top: 0.5rem;
+                transform: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            .form-container {
+                padding: 1.5rem;
+            }
+
+            .page-header {
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">Annadata-Setu</a>
+            <a href="index.html" class="back-btn">← Back to Home</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>Donate Food</h1>
+                <p>Make a difference by sharing your surplus food with those in need</p>
+            </div>
+
+            <!-- Info Cards -->
+            <div class="info-cards">
+                <div class="info-card">
+                    <span class="info-card-icon">⚡</span>
+                    <h3>Quick Process</h3>
+                    <p>List your food in under 3 minutes</p>
+                </div>
+                <div class="info-card">
+                    <span class="info-card-icon">📍</span>
+                    <h3>Local Pickup</h3>
+                    <p>NGOs nearby will collect from you</p>
+                </div>
+                <div class="info-card">
+                    <span class="info-card-icon">🏆</span>
+                    <h3>Make Impact</h3>
+                    <p>Feed families and reduce waste</p>
+                </div>
+                <div class="info-card">
+                    <span class="info-card-icon">🔒</span>
+                    <h3>Safe & Secure</h3>
+                    <p>Verified partners only</p>
+                </div>
+            </div>
+
+            <!-- Donation Form -->
+            <div class="form-container">
+                <h2 class="form-title">Food Donation Details</h2>
+                
+                <form id="donationForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="donorName" class="required">Organization/Restaurant Name</label>
+                            <input type="text" id="donorName" name="donorName" required 
+                                   placeholder="e.g., Hotel Taj, ABC Restaurant">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contactPerson" class="required">Contact Person</label>
+                            <input type="text" id="contactPerson" name="contactPerson" required 
+                                   placeholder="Manager/Owner name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone" class="required">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" required 
+                                   placeholder="+91 98765 43210">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" 
+                                   placeholder="contact@restaurant.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="foodType" class="required">Food Type</label>
+                            <select id="foodType" name="foodType" required>
+                                <option value="">Select food category</option>
+                                <option value="cooked-meals">Cooked Meals</option>
+                                <option value="raw-ingredients">Raw Ingredients</option>
+                                <option value="packaged-items">Packaged Items</option>
+                                <option value="fruits-vegetables">Fruits & Vegetables</option>
+                                <option value="dairy-products">Dairy Products</option>
+                                <option value="bakery-items">Bakery Items</option>
+                                <option value="beverages">Beverages</option>
+                                <option value="mixed">Mixed Items</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="quantity" class="required">Estimated Quantity</label>
+                            <input type="text" id="quantity" name="quantity" required 
+                                   placeholder="e.g., 50 kg, 100 portions, 20 packets">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="foodDescription" class="required">Food Description</label>
+                            <textarea id="foodDescription" name="foodDescription" required 
+                                      placeholder="Describe the food items in detail (ingredients, preparation time, any allergens, etc.)"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="preparedTime">Prepared/Packed Time</label>
+                            <input type="datetime-local" id="preparedTime" name="preparedTime">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="expiryTime" class="required">Best Before/Pickup Deadline</label>
+                            <input type="datetime-local" id="expiryTime" name="expiryTime" required>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="address" class="required">Pickup Address</label>
+                            <textarea id="address" name="address" required 
+                                      placeholder="Complete address with landmark and pincode"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="city" class="required">City</label>
+                            <input type="text" id="city" name="city" required 
+                                   placeholder="e.g., Delhi, Mumbai, Bangalore">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pincode" class="required">Pincode</label>
+                            <input type="text" id="pincode" name="pincode" required 
+                                   placeholder="e.g., 110001" pattern="[0-9]{6}">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="specialInstructions">Special Instructions</label>
+                            <textarea id="specialInstructions" name="specialInstructions" 
+                                      placeholder="Any specific instructions for pickup (parking, entry points, contact preferences, etc.)"></textarea>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="terms" name="terms" required>
+                                <label for="terms">I confirm that the food is safe for consumption and agree to the <a href="#" style="color: var(--accent-orange);">terms and conditions</a></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        🍽️ Submit Food Donation
+                    </button>
+                </form>
+
+                <div id="successMessage" class="success-message">
+                    <h3>🎉 Thank you for your donation!</h3>
+                    <p>Your food listing has been submitted successfully. Nearby NGOs will be notified and will contact you soon for pickup arrangements.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set minimum datetime for prepared and expiry time inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            const now = new Date();
+            const currentTime = now.toISOString().slice(0, 16);
+            
+            const preparedTimeInput = document.getElementById('preparedTime');
+            const expiryTimeInput = document.getElementById('expiryTime');
+            
+            // Set current time as default for prepared time
+            preparedTimeInput.value = currentTime;
+            
+            // Set minimum time for expiry (1 hour from now)
+            const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
+            expiryTimeInput.min = oneHourLater.toISOString().slice(0, 16);
+            expiryTimeInput.value = oneHourLater.toISOString().slice(0, 16);
+        });
+
+        // Form submission handling
+        document.getElementById('donationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.querySelector('.submit-btn');
+            const successMessage = document.getElementById('successMessage');
+            
+            // Add loading state
+            submitBtn.classList.add('loading');
+            submitBtn.innerHTML = '🍽️ Submitting Donation...';
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Hide form and show success message
+                this.style.display = 'none';
+                successMessage.classList.add('show');
+                
+                // Reset button state
+                submitBtn.classList.remove('loading');
+                submitBtn.innerHTML = '🍽️ Submit Food Donation';
+                
+                // Scroll to success message
+                successMessage.scrollIntoView({ behavior: 'smooth' });
+                
+                // Optional: Redirect after 5 seconds
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 5000);
+            }, 2000);
+        });
+
+        // Auto-format phone number
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length <= 10) {
+                if (value.length > 5) {
+                    value = value.replace(/(\d{5})(\d{5})/, '$1 $2');
+                }
+                e.target.value = value;
+            }
+        });
+
+        // Auto-format pincode
+        document.getElementById('pincode').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 6) {
+                value = value.slice(0, 6);
+            }
+            e.target.value = value;
+        });
+
+        // Validate expiry time is after current time
+        document.getElementById('expiryTime').addEventListener('change', function(e) {
+            const expiryTime = new Date(e.target.value);
+            const currentTime = new Date();
+            
+            if (expiryTime <= currentTime) {
+                alert('Please select a time at least 1 hour from now');
+                const oneHourLater = new Date(currentTime.getTime() + 60 * 60 * 1000);
+                e.target.value = oneHourLater.toISOString().slice(0, 16);
+            }
+        });
+
+        // Enhanced form validation
+        function validateForm() {
+            const requiredFields = document.querySelectorAll('input[required], select[required], textarea[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = '#e74c3c';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = 'rgba(76, 175, 80, 0.2)';
+                }
+            });
+            
+            return isValid;
+        }
+
+        // Add real-time validation
+        document.querySelectorAll('input, select, textarea').forEach(field => {
+            field.addEventListener('blur', function() {
+                if (this.hasAttribute('required') && !this.value.trim()) {
+                    this.style.borderColor = '#e74c3c';
+                } else {
+                    this.style.borderColor = 'rgba(76, 175, 80, 0.2)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
