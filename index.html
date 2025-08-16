@@ -96,6 +96,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            cursor: pointer;
         }
 
         .logo::before {
@@ -125,9 +126,11 @@
             border-radius: 25px;
             transition: all 0.3s ease;
             position: relative;
+            cursor: pointer;
         }
 
-        .nav-links a:hover {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: white;
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
@@ -148,6 +151,63 @@
             margin: 3px 0;
             transition: 0.3s;
             border-radius: 2px;
+        }
+
+        .mobile-menu.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2rem 0;
+            transform: translateY(-100%);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .mobile-nav.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .mobile-nav ul {
+            list-style: none;
+            text-align: center;
+            gap: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mobile-nav a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            font-size: 1.2rem;
+            padding: 1rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 2rem;
+        }
+
+        .mobile-nav a:hover {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
         }
 
         /* Hero Section */
@@ -796,19 +856,29 @@
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <div class="logo">Annadata-Setu</div>
+            <div class="logo" onclick="showSection('home')">Annadata-Setu</div>
             <ul class="nav-links">
-                <li><a href="#" onclick="showSection('home')">🏠 Home</a></li>
-                <li><a href="#" onclick="showSection('donor')">🍽️ Donate</a></li>
-                <li><a href="#" onclick="showSection('ngo')">🤝 Find Food</a></li>
-                <li><a href="#" onclick="showSection('farmer')">🚜 Farmers</a></li>
-                <li><a href="#" onclick="showSection('waste')">♻️ Report</a></li>
+                <li><a href="#" onclick="showSection('home')" id="home-link">🏠 Home</a></li>
+                <li><a href="donation.html">🍽️ Donate</a></li>
+                <li><a href="#" onclick="showSection('ngo')" id="ngo-link">🤝 Find Food</a></li>
+                <li><a href="#" onclick="showSection('farmer')" id="farmer-link">🚜 Farmers</a></li>
+                <li><a href="#" onclick="showSection('waste')" id="waste-link">♻️ Report</a></li>
             </ul>
             <div class="mobile-menu" onclick="toggleMobileMenu()">
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
+        </div>
+        <!-- Mobile Navigation -->
+        <div class="mobile-nav" id="mobileNav">
+            <ul>
+                <li><a href="#" onclick="showSection('home'); toggleMobileMenu();">🏠 Home</a></li>
+                <li><a href="donation.html">🍽️ Donate</a></li>
+                <li><a href="#" onclick="showSection('ngo'); toggleMobileMenu();">🤝 Find Food</a></li>
+                <li><a href="#" onclick="showSection('farmer'); toggleMobileMenu();">🚜 Farmers</a></li>
+                <li><a href="#" onclick="showSection('waste'); toggleMobileMenu();">♻️ Report</a></li>
+            </ul>
         </div>
     </nav>
 
@@ -824,7 +894,7 @@
                 <h1>Annadata-Setu</h1>
                 <p>The Farmer's Bridge - Connecting surplus to need, empowering farmers with data-driven insights for a sustainable tomorrow</p>
                 <div class="cta-buttons">
-                    <a href="#" class="btn btn-primary" onclick="showSection('donor')">🍽️ Donate Food</a>
+                    <a href="donation.html" class="btn btn-primary">🍽️ Donate Food</a>
                     <a href="#" class="btn btn-secondary" onclick="showSection('ngo')">🔍 Find Food</a>
                     <a href="#" class="btn btn-primary" onclick="showSection('farmer')">📊 Market Data</a>
                 </div>
@@ -868,64 +938,3 @@
                     <span class="stat-number">2.5K+</span>
                     <span class="stat-label">Meals Saved Daily</span>
                 </div>
-                <div class="stat-card">
-                    <span class="stat-number">150+</span>
-                    <span class="stat-label">Partner NGOs</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number">500+</span>
-                    <span class="stat-label">Registered Farmers</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number">95%</span>
-                    <span class="stat-label">Food Recovery Rate</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Food Donor Dashboard -->
-    <section id="donor" class="dashboard">
-        <div class="container">
-            <div class="dashboard-header animate-fadeInUp">
-                <h2>Food Donor Portal</h2>
-                <p>List your surplus food and make a difference in your community</p>
-            </div>
-            
-            <div class="form-container">
-                <h3>🏨 Post Food Donation</h3>
-                <form id="donorForm">
-                    <div class="form-group">
-                        <label for="donorName">Organization Name</label>
-                        <input type="text" id="donorName" name="donorName" required placeholder="Hotel ABC / Event Company XYZ">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="foodType">Food Type</label>
-                        <select id="foodType" name="foodType" required>
-                            <option value="">Select food type</option>
-                            <option value="cooked">Cooked Meals</option>
-                            <option value="raw">Raw Ingredients</option>
-                            <option value="packaged">Packaged Items</option>
-                            <option value="fruits">Fruits & Vegetables</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="quantity">Estimated Quantity (portions/kg)</label>
-                        <input type="number" id="quantity" name="quantity" required placeholder="e.g., 100">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="pickupTime">Pickup Window</label>
-                        <input type="datetime-local" id="pickupTime" name="pickupTime" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="location">Pickup Location</label>
-                        <input type="text" id="location" name="location" required placeholder="Full address with pincode">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="contact">Contact Number</label>
-                        <input type="tel" id="contact" name="contact" required placeholder="+91 XXXXX XXXXX">
