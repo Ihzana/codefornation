@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annadata-Setu | Farmer Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0fdf4 100%);
+            min-height: 100vh;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 24px;
+            padding: 25px 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #22c55e, #3b82f6, #a855f7, #22c55e);
+            background-size: 200% 100%;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 200% 0; }
+            50% { background-position: -200% 0; }
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #22c55e, #84cc16);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            box-shadow: 0 10px 20px rgba(34, 197, 94, 0.3);
+            animation: rotate 8s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .logo-text {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #22c55e, #84cc16);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .user-profile {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .user-profile:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 30px rgba(245, 158, 11, 0.5);
+        }
+
+        .tab-navigation {
+            display: flex;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 20px;
+            padding: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 18px 25px;
+            border: none;
+            background: transparent;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #4b5563;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #22c55e, #84cc16);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(34, 197, 94, 0.4);
+        }
+
+        .tab-button:not(.active):hover {
+            background: rgba(34, 197, 94, 0.1);
+            color: #059669;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .controls {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .search-container {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 20px 60px 20px 25px;
+            border: none;
+            border-radius: 16px;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            font-size: 16px;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #22c55e;
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: #22c55e;
+        }
+
+        .sort-select {
+            padding: 20px 25px;
+            border: none;
+            border-radius: 16px;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            min-width: 220px;
+        }
+
+        .sort-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .sort-select option {
+            background: #0f172a;
+            color: white;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .crop-card {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .crop-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #22c55e, #3b82f6, #a855f7);
+        }
+
+        .crop-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.7);
+        }
+
+        .crop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .crop-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .trend-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        .trend-up {
+            background: linear-gradient(135deg, #22c55e, #84cc16);
+        }
+
+        .trend-down {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .crop-price {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .crop-details {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .crop-detail {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .insights-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .top-demands {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .section-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .demand-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 20px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border-left: 4px solid #22c55e;
+            transition: all 0.3s ease;
+        }
+
+        .demand-item:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .demand-crop {
+            font-weight: 700;
+            color: white;
+            font-size: 16px;
+        }
+
+        .priority-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .priority-high {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .priority-medium {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .priority-low {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+        }
+
+        .chart-container {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .chart {
+            display: flex;
+            align-items: end;
+            gap: 20px;
+            height: 300px;
+            margin-top: 40px;
+            padding: 30px 0;
+        }
+
+        .bar {
+            flex: 1;
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            max-width: 80px;
+        }
+
+        .bar:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            font-weight: 600;
+            color: #4b5563;
+            text-align: center;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            font-weight: bold;
+            color: #1f2937;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 4px 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        @media (max-width: 1024px) {
+            .insights-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .logo-text {
+                font-size: 28px;
+            }
+
+            .controls {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .search-container,
+            .sort-select {
+                min-width: 100%;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .tab-button {
+                font-size: 14px;
+                padding: 15px 20px;
+            }
+
+            .chart {
+                height: 250px;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">🌾</div>
+                    <div class="logo-text">Annadata-Setu</div>
+                </div>
+                <div class="user-profile">👨‍🌾</div>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-button active" onclick="switchTab('market-prices')">
+                Live Market Prices
+            </button>
+            <button class="tab-button" onclick="switchTab('demand-insights')">
+                Demand Insights
+            </button>
+        </div>
+
+        <!-- Tab 1: Live Market Prices -->
+        <div id="market-prices" class="tab-content active">
+            <div class="controls">
+                <div class="search-container">
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        placeholder="Search crops (e.g., Wheat, Rice, Tomato...)"
+                        oninput="filterCrops(this.value)"
+                    >
+                    <span class="search-icon">🔍</span>
+                </div>
+                <select class="sort-select" onchange="sortCrops(this.value)">
+                    <option value="">Sort by Price</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="name">Name (A-Z)</option>
+                </select>
+            </div>
+
+            <div id="crops-container" class="cards-grid">
+                <!-- Crop cards will be dynamically generated here -->
+            </div>
+        </div>
+
+        <!-- Tab 2: Demand Insights -->
+        <div id="demand-insights" class="tab-content">
+            <div class="insights-container">
+                <div class="top-demands">
+                    <h2 class="section-title">Top Demanded Crops</h2>
+                    <div id="demands-list">
+                        <!-- Demand items will be generated here -->
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h2 class="section-title">Weekly Demand Forecast</h2>
+                    <div class="chart" id="demand-chart">
+                        <!-- Chart bars will be generated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for market prices
+        const marketData = [
+            {
+                name: "Rice (Basmati)",
+                price: 4500,
+                unit: "quintal",
+                trend: "up",
+                market: "Kochi Spice Market, Kerala",
+                updated: "1 hour ago"
+            },
+            {
+                name: "Coconut",
+                price: 2800,
+                unit: "100 pieces",
+                trend: "up",
+                market: "Pollachi Market, Tamil Nadu",
+                updated: "30 minutes ago"
+            },
+            {
+                name: "Black Pepper",
+                price: 65000,
+                unit: "quintal",
+                trend: "up",
+                market: "Kumily Spice Market, Kerala",
+                updated: "45 minutes ago"
+            },
+            {
+                name: "Cardamom",
+                price: 125000,
+                unit: "quintal",
+                trend: "down",
+                market: "Munnar Hill Station, Kerala",
+                updated: "2 hours ago"
+            },
+            {
+                name: "Turmeric",
+                price: 8500,
+                unit: "quintal",
+                trend: "up",
+                market: "Erode Market, Tamil Nadu",
+                updated: "1 hour ago"
+            },
+            {
+                name: "Banana",
+                price: 1200,
+                unit: "quintal",
+                trend: "down",
+                market: "Thrissur Market, Kerala",
+                updated: "3 hours ago"
+            },
+            {
+                name: "Coffee Beans",
+                price: 25000,
+                unit: "quintal",
+                trend: "up",
+                market: "Chikmagalur Market, Karnataka",
+                updated: "2 hours ago"
+            },
+            {
+                name: "Rubber",
+                price: 18500,
+                unit: "quintal",
+                trend: "down",
+                market: "Kottayam Rubber Market, Kerala",
+                updated: "4 hours ago"
+            },
+            {
+                name: "Cashew Nuts",
+                price: 95000,
+                unit: "quintal",
+                trend: "up",
+                market: "Kollam Cashew Market, Kerala",
+                updated: "1.5 hours ago"
+            },
+            {
+                name: "Tamarind",
+                price: 4200,
+                unit: "quintal",
+                trend: "up",
+                market: "Madurai Market, Tamil Nadu",
+                updated: "2.5 hours ago"
+            }
+        ];
+
+        // Sample data for demand insights
+        const demandData = [
+            { crop: "Rice", priority: "high" },
+            { crop: "Wheat", priority: "high" },
+            { crop: "Pulses", priority: "medium" },
+            { crop: "Vegetables", priority: "medium" },
+            { crop: "Fruits", priority: "low" }
+        ];
+
+        const weeklyForecast = [
+            { day: "Mon", wheat: 85, rice: 92, tomato: 78, onion: 65 },
+            { day: "Tue", wheat: 88, rice: 89, tomato: 82, onion: 70 },
+            { day: "Wed", wheat: 92, rice: 94, tomato: 75, onion: 68 },
+            { day: "Thu", wheat: 87, rice: 91, tomato: 88, onion: 72 },
+            { day: "Fri", wheat: 90, rice: 96, tomato: 85, onion: 75 },
+            { day: "Sat", wheat: 94, rice: 98, tomato: 90, onion: 78 },
+            { day: "Sun", wheat: 89, rice: 93, tomato: 87, onion: 74 }
+        ];
+
+        let filteredData = [...marketData];
+
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Remove active class from all tabs and buttons
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Add active class to selected tab and button
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            // Load demand insights when switching to that tab
+            if (tabName === 'demand-insights') {
+                loadDemandInsights();
+            }
+        }
+
+        // Generate crop cards
+        function generateCropCards(data = filteredData) {
+            const container = document.getElementById('crops-container');
+            
+            if (data.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 50px; color: #6b7280; grid-column: 1/-1;">No crops found matching your search.</div>';
+                return;
+            }
+
+            container.innerHTML = data.map(crop => `
+                <div class="crop-card">
+                    <div class="crop-header">
+                        <div class="crop-name">${crop.name}</div>
+                        <div class="trend-icon trend-${crop.trend}">
+                            ${crop.trend === 'up' ? '↗️' : '↘️'}
+                        </div>
+                    </div>
+                    <div class="crop-price">₹${crop.price.toLocaleString()} / ${crop.unit}</div>
+                    <div class="crop-details">
+                        <div class="crop-detail">
+                            <span class="detail-icon">📍</span>
+                            <span>${crop.market}</span>
+                        </div>
+                        <div class="crop-detail">
+                            <span class="detail-icon">🕒</span>
+                            <span>Updated ${crop.updated}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter crops by search
+        function filterCrops(searchTerm) {
+            filteredData = marketData.filter(crop => 
+                crop.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            generateCropCards(filteredData);
+        }
+
+        // Sort crops
+        function sortCrops(sortType) {
+            switch(sortType) {
+                case 'price-high':
+                    filteredData.sort((a, b) => b.price - a.price);
+                    break;
+                case 'price-low':
+                    filteredData.sort((a, b) => a.price - b.price);
+                    break;
+                case 'name':
+                    filteredData.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                default:
+                    filteredData = [...marketData];
+            }
+            generateCropCards(filteredData);
+        }
+
+        // Load demand insights
+        function loadDemandInsights() {
+            // Generate top demands list
+            const demandsList = document.getElementById('demands-list');
+            demandsList.innerHTML = demandData.map(item => `
+                <div class="demand-item">
+                    <span class="demand-crop">${item.crop}</span>
+                    <span class="priority-badge priority-${item.priority}">${item.priority}</span>
+                </div>
+            `).join('');
+
+            // Generate weekly forecast chart
+            const chart = document.getElementById('demand-chart');
+            const crops = ['wheat', 'rice', 'tomato', 'onion'];
+            const colors = ['#22c55e', '#3b82f6', '#f59e0b', '#ef4444'];
+            
+            chart.innerHTML = weeklyForecast.map((day, index) => `
+                <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                    <div 
+                        class="bar" 
+                        style="height: ${(day.wheat / 100) * 250}px; background: linear-gradient(to top, ${colors[0]}, ${colors[0]}99);"
+                        title="Wheat: ${day.wheat}%"
+                    >
+                        <div class="bar-value">${day.wheat}%</div>
+                    </div>
+                    <div class="bar-label">${day.day}</div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            generateCropCards();
+            loadDemandInsights();
+            
+            // Add entrance animation
+            setTimeout(() => {
+                document.querySelectorAll('.crop-card').forEach((card, index) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(30px)';
+                    setTimeout(() => {
+                        card.style.transition = 'all 0.6s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, index * 100);
+                });
+            }, 100);
+        });
+
+        // Simulate real-time updates
+        setInterval(() => {
+            const randomIndex = Math.floor(Math.random() * marketData.length);
+            const randomChange = (Math.random() - 0.5) * 200;
+            marketData[randomIndex].price = Math.max(100, Math.round(marketData[randomIndex].price + randomChange));
+            marketData[randomIndex].trend = randomChange > 0 ? 'up' : 'down';
+            marketData[randomIndex].updated = 'Just now';
+            
+            if (document.getElementById('market-prices').classList.contains('active')) {
+                generateCropCards();
+            }
+        }, 30000); // Update every 30 seconds
+    </script>
+</body>
+</html>
