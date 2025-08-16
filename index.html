@@ -210,6 +210,16 @@
             border: 1px solid var(--glass-border);
         }
 
+        /* Section Base Styles */
+        .section {
+            min-height: 100vh;
+            padding-top: 100px;
+        }
+
+        .section.hidden {
+            display: none;
+        }
+
         /* Hero Section */
         .hero {
             min-height: 100vh;
@@ -536,26 +546,9 @@
         .dashboard {
             background: rgba(255, 255, 255, 0.95);
             padding: 120px 0;
-            display: none;
             position: relative;
             min-height: 100vh;
             backdrop-filter: blur(20px);
-        }
-
-        .dashboard.active {
-            display: block;
-            animation: slideIn 0.6s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .dashboard-header {
@@ -850,6 +843,21 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        .slide-in {
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body>
@@ -858,10 +866,10 @@
         <div class="nav-container">
             <div class="logo" onclick="showSection('home')">Annadata-Setu</div>
             <ul class="nav-links">
-                <li><a href="#" onclick="showSection('home')" id="home-link">🏠 Home</a></li>
+                <li><a href="#" onclick="showSection('home')" id="home-link" class="active">🏠 Home</a></li>
                 <li><a href="donation.html">🍽️ Donate</a></li>
                 <li><a href="ngo.html" id="ngo-link">🤝 Find Food</a></li>
-                <li><a href="#" onclick="showSection('farmer')" id="farmer-link">🚜 Farmers</a></li>
+                <li><a href="farmer.html" id="farmer-link">🚜 Farmers</a></li>
                 <li><a href="#" onclick="showSection('waste')" id="waste-link">♻️ Report</a></li>
             </ul>
             <div class="mobile-menu" onclick="toggleMobileMenu()">
@@ -876,57 +884,52 @@
                 <li><a href="#" onclick="showSection('home'); toggleMobileMenu();">🏠 Home</a></li>
                 <li><a href="donation.html">🍽️ Donate</a></li>
                 <li><a href="ngo.html">🤝 Find Food</a></li>
-                <li><a href="#" onclick="showSection('farmer'); toggleMobileMenu();">🚜 Farmers</a></li>
+                <li><a href="farmer.html">🚜 Farmers</a></li>
                 <li><a href="#" onclick="showSection('waste'); toggleMobileMenu();">♻️ Report</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="floating-icons">
-            <div class="floating-icon">🌾</div>
-            <div class="floating-icon">🍎</div>
-            <div class="floating-icon">🤝</div>
-        </div>
-        <div class="hero-content">
-            <div class="container">
-                <h1>Annadata-Setu</h1>
-                <p>The Farmer's Bridge - Connecting surplus to need, empowering farmers with data-driven insights for a sustainable tomorrow</p>
-                <div class="cta-buttons">
-                    <a href="donation.html" class="btn btn-primary">🍽️ Donate Food</a>
-                    <a href="ngo.html" class="btn btn-secondary">🔍 Find Food</a>
-                    <a href="#" class="btn btn-primary" onclick="showSection('farmer')">📊 Market Data</a>
+    <!-- Home Section -->
+    <section id="home" class="section">
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="floating-icons">
+                <div class="floating-icon">🌾</div>
+                <div class="floating-icon">🍎</div>
+                <div class="floating-icon">🤝</div>
+            </div>
+            <div class="hero-content">
+                <div class="container">
+                    <h1>Annadata-Setu</h1>
+                    <p>The Farmer's Bridge - Connecting surplus to need, empowering farmers with data-driven insights for a sustainable tomorrow</p>
+                    <div class="cta-buttons">
+                        <a href="donation.html" class="btn btn-primary">🍽️ Donate Food</a>
+                        <a href="ngo.html" class="btn btn-secondary">🔍 Find Food</a>
+                        <a href="farmer.html" class="btn btn-primary">📊 Market Data</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
 
-    <!-- Features Section -->
-    <section class="features" id="features">
-        <div class="container">
-            <div class="section-header">
-                <h2>Transforming Communities Through Technology</h2>
-                <p>A comprehensive platform solving urban food waste and rural agricultural challenges</p>
-            </div>
-            
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🍽️</div>
-                    <h3>Food Waste Reduction</h3>
-                    <p>Connect hotels, restaurants, and events with NGOs to redistribute surplus food efficiently and reduce waste</p>
+        <!-- Features Section -->
+        <div class="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Transforming Communities Through Technology</h2>
+                    <p>A comprehensive platform solving urban food waste and rural agricultural challenges</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🤖</div>
-                    <h3>AI-Powered Forecasting</h3>
-                    <p>Predict food demand patterns to help farmers plan better and negotiate fair market prices</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🗺️</div>
-                    <h3>Smart Mapping</h3>
-                    <p>Identify waste hotspots and optimize food distribution networks across cities for maximum impact</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💰</div>
-                    <h3>Market Transparency</h3>
-                    <p>Real-time crop prices and market intelligence for farmers and FPOs to make informed decision</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🍽️</div>
+                        <h3>Food Waste Reduction</h3>
+                        <p>Connect hotels, restaurants, and events with NGOs to redistribute surplus food efficiently and reduce waste</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🤖</div>
+                        <h3>AI-Powered Forecasting</h3>
+                        <p>Predict food demand patterns to help farmers plan better and negotiate fair market prices</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🗺️
